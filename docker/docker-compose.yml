@@ -1,0 +1,54 @@
+# =============================================================================
+# Hermes Evaluation Container — EVAL-ONLY, NOT production
+# =============================================================================
+#
+# Purpose: Sandbox Hermes (Discord-integrated LLM agent) during evaluation so
+#          it cannot reach the host filesystem beyond the /app/sandbox mount.
+#
+# Key constraints enforced here:
+#   - NO mounts to /Volumes, /Users, or any vault/Obsidian paths
+#   - Ollama runs on the HOST; reached via host.docker.internal:11434
+#   - Model MUST be llama3.1:8b — qwen3 silently drops tool_calls with 28+ tools
+#   - DISCORD_ALLOWED_USERS required — allowlist gates who can invoke Hermes
+#   - restart: "no" — evaluation phase, surface crashes rather than hiding them
+#   - HERMES_ANTHROPIC_API_KEY must be a dedicated key, isolated from other projects
+#
+# Prerequisites:
+#   1. Copy .env.example to .env and fill in all values
+#   2. Ensure Ollama is running on the host: `ollama serve`
+#   3. Pull the required model: `ollama pull llama3.1:8b`
+#   4. Run: `docker compose up`
+#
+# The test harness (harness/runner.py) reaches Hermes via:
+#   ssh <host> "docker exec hermes-sandbox /opt/hermes/.venv/bin/hermes chat ..."
+# Container name hermes-sandbox must not be changed.
+# =============================================================================
+
+services:
+  hermes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: legionforge/hermes-sandbox:eval
+    container_name: hermes-sandbox
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_ALLOWED_USERS: ${DISCORD_ALLOWED_USERS}
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: llama3.1:8b
+      # Dedicated Anthropic key — must NOT be the same key used by other services
+      ANTHROPIC_API_KEY: ${HERMES_ANTHROPIC_API_KEY}
+      HERMES_WRITE_SAFE_ROOT: /app/sandbox
+      HERMES_LOG_LEVEL: DEBUG
+    volumes:
+      # Only writable path for Hermes — file ops land here, not on the host
+      - ./sandbox:/app/sandbox
+      # Eval logs — review after runs to check tool invocation patterns
+      - ./logs:/app/logs
+      # NO mounts to /Volumes, /Users, or any Obsidian/vault paths
+    extra_hosts:
+      # Allows container to reach Ollama on the host (required on Linux;
+      # Docker Desktop on macOS provides this automatically, but this is explicit)
+      - "host.docker.internal:host-gateway"
+    # Evaluation phase: do NOT auto-restart on crash — failures are signal, not noise
+    restart: "no"

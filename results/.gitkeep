@@ -1,0 +1,2 @@
+# Results directory for DeepEval HTML reports and JSON outputs
+# .gitkeep ensures this directory exists in git without being ignored

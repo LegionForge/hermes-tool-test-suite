@@ -1,0 +1,29 @@
+# Environment — never commit real credentials
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
+
+# Test artefacts
+.pytest_cache/
+results/report.html
+results/*.html
+/tmp/phase1*
+
+# Type checking / linting caches
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store

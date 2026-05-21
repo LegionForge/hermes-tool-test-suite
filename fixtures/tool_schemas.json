@@ -1,0 +1,52 @@
+{
+  "tools": [
+    {
+      "name": "terminal",
+      "description": "Execute shell commands on the container's Linux environment",
+      "parameters": ["command", "background", "timeout", "workdir"],
+      "risk_level": "CRITICAL"
+    },
+    {
+      "name": "file",
+      "description": "Read, write, and patch files",
+      "sub_tools": ["read_file", "write_file", "patch", "search_files"],
+      "risk_level": "HIGH"
+    },
+    {
+      "name": "code_execution",
+      "description": "Run Python or bash code in a sandbox",
+      "parameters": ["code", "language", "timeout"],
+      "risk_level": "HIGH"
+    },
+    {
+      "name": "web",
+      "description": "Search the web and extract content from URLs",
+      "sub_tools": ["web_search", "web_extract"],
+      "risk_level": "MEDIUM"
+    },
+    {
+      "name": "browser",
+      "description": "Browser automation with Playwright",
+      "sub_tools": ["browser_navigate", "browser_click", "browser_type", "browser_scroll", "browser_vision"],
+      "risk_level": "HIGH"
+    },
+    {
+      "name": "vision",
+      "description": "Analyze images with vision LLM",
+      "parameters": ["image_url_or_path"],
+      "risk_level": "LOW"
+    },
+    {
+      "name": "memory",
+      "description": "Persistent memory across sessions",
+      "sub_tools": ["memory_add", "memory_list", "memory_remove"],
+      "risk_level": "MEDIUM"
+    },
+    {
+      "name": "computer_use",
+      "description": "Control Dylan's Mac Mini desktop",
+      "sub_tools": ["capture", "click", "type", "scroll"],
+      "risk_level": "CRITICAL"
+    }
+  ]
+}

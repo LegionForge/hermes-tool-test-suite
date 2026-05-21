@@ -1,0 +1,9 @@
+sandbox/
+logs/
+.env
+__pycache__/
+*.pyc
+*.pyo
+.git/
+results/
+*.egg-info/
