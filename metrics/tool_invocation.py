@@ -1,6 +1,6 @@
 """ToolInvocationMetric: Verifies that a tool was actually invoked."""
 
-from deepeval.metrics import CustomMetric
+from deepeval.metrics import CustomMetric  # type: ignore[attr-defined]
 from deepeval.test_case import LLMTestCase
 
 
@@ -40,4 +40,4 @@ class ToolInvocationMetric(CustomMetric):
 
     def is_successful(self) -> bool:
         """Override: success if score >= 0.5."""
-        return self.score >= 0.5
+        return bool(self.score >= 0.5)
