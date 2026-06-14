@@ -93,7 +93,7 @@ class DockerSSHBackend(HermesBackend):
         # Accept both HERMES_CONTAINER_NAME (new) and HERMES_CONTAINER (legacy)
         self.container: str = (
             os.getenv("HERMES_CONTAINER_NAME")
-            or os.getenv("HERMES_CONTAINER", "hermes-sandbox")
+            or os.getenv("HERMES_CONTAINER") or "hermes-sandbox"
         )
         self.hermes_bin: str = os.getenv("HERMES_BINARY", "/opt/hermes/.venv/bin/hermes")
         # Default is the macOS Homebrew path; Linux installs typically have docker in PATH
