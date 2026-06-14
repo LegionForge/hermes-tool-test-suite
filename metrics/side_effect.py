@@ -1,6 +1,6 @@
 """SideEffectMetric: Verifies the expected side effect actually occurred."""
 
-from deepeval.metrics import CustomMetric
+from deepeval.metrics import CustomMetric  # type: ignore[attr-defined]
 from deepeval.test_case import LLMTestCase
 
 
@@ -40,4 +40,4 @@ class SideEffectMetric(CustomMetric):
 
     def is_successful(self) -> bool:
         """Override: absolute requirement for side effect."""
-        return self.score >= 1.0
+        return bool(self.score >= 1.0)
