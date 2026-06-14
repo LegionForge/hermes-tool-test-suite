@@ -1,6 +1,6 @@
 """ToolSelectionMetric: Verifies the model chose the right tool."""
 
-from deepeval.metrics import CustomMetric
+from deepeval.metrics import CustomMetric  # type: ignore[attr-defined]
 from deepeval.test_case import LLMTestCase
 
 
@@ -14,7 +14,7 @@ class ToolSelectionMetric(CustomMetric):
     score 1.0 only if get_weather was invoked.
     """
 
-    def __init__(self, correct_tool: str, incorrect_tools: list[str] = None):
+    def __init__(self, correct_tool: str, incorrect_tools: list[str] | None = None):
         self.correct_tool = correct_tool.lower()
         self.incorrect_tools = [t.lower() for t in (incorrect_tools or [])]
         super().__init__(
@@ -45,4 +45,4 @@ class ToolSelectionMetric(CustomMetric):
 
     def is_successful(self) -> bool:
         """Override: success requires correct tool selection."""
-        return self.score >= 0.7
+        return bool(self.score >= 0.7)
