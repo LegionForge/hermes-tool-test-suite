@@ -1,0 +1,8 @@
+title = "Gitleaks config — hermes-tool-test-suite"
+
+[[allowlists]]
+description = "Example env files contain placeholder values, not real secrets"
+paths = [
+  '''docker/\.env\.example$''',
+  '''\.env\.example$''',
+]
