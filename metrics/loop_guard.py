@@ -4,7 +4,7 @@ Regression test for the catastrophic failure seen in prior validation:
 browser_navigate being repeated 1000+ times, causing timeouts and stream failures.
 """
 
-from deepeval.metrics import CustomMetric
+from deepeval.metrics import CustomMetric  # type: ignore[attr-defined]
 from deepeval.test_case import LLMTestCase
 
 
@@ -41,12 +41,12 @@ class LoopGuardMetric(CustomMetric):
         # Check elapsed time
         elapsed = getattr(test_case, "elapsed_seconds", None)
         if elapsed is None and hasattr(test_case, "metadata"):
-            elapsed = test_case.metadata.get("elapsed_seconds")
+            elapsed = test_case.metadata.get("elapsed_seconds") if test_case.metadata is not None else None
 
         # Check tool call count
         tool_calls = getattr(test_case, "tool_calls_detected", [])
         if not tool_calls and hasattr(test_case, "metadata"):
-            tool_calls = test_case.metadata.get("tool_calls_detected", [])
+            tool_calls = test_case.metadata.get("tool_calls_detected", []) if test_case.metadata is not None else []
 
         # Timeout indicator (test framework sets this)
         timed_out = getattr(test_case, "timed_out", False)
@@ -66,4 +66,4 @@ class LoopGuardMetric(CustomMetric):
 
     def is_successful(self) -> bool:
         """Override: must complete without timeout or excessive calls."""
-        return self.score >= 1.0
+        return bool(self.score >= 1.0)

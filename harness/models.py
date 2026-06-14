@@ -1,7 +1,6 @@
 """Data models for Hermes tool testing."""
 
 from dataclasses import dataclass, field
-from typing import Optional
 from datetime import datetime
 
 
@@ -55,8 +54,8 @@ class ModelConfig:
     model: str  # e.g., "qwen3-4b-hermes-64k:latest"
     provider: str  # "ollama", "openrouter", "claude-api"
     host: str  # e.g., "localhost", "api.openrouter.ai", "api.anthropic.com"
-    base_url: Optional[str] = None  # For custom endpoints
-    api_key: Optional[str] = None  # For cloud providers
+    base_url: str | None = None  # For custom endpoints
+    api_key: str | None = None  # For cloud providers
 
     @property
     def is_local(self) -> bool:

@@ -4,9 +4,8 @@ import os
 import re
 import subprocess
 import time
-from typing import Optional
-from pathlib import Path
-from harness.models import ToolResult, ModelConfig
+
+from harness.models import ToolResult
 
 
 class HermesRunner:
@@ -26,8 +25,8 @@ class HermesRunner:
         self,
         prompt: str,
         toolsets: list[str],
-        model: Optional[str] = None,
-        provider: Optional[str] = None,
+        model: str | None = None,
+        provider: str | None = None,
         quiet: bool = True,
     ) -> ToolResult:
         """

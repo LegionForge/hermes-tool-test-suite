@@ -14,7 +14,6 @@ import os
 import subprocess
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -94,15 +93,15 @@ class DockerSSHBackend(HermesBackend):
         # Accept both HERMES_CONTAINER_NAME (new) and HERMES_CONTAINER (legacy)
         self.container: str = (
             os.getenv("HERMES_CONTAINER_NAME")
-            or os.getenv("HERMES_CONTAINER", "hermes-sandbox")
+            or os.getenv("HERMES_CONTAINER") or "hermes-sandbox"
         )
         self.hermes_bin: str = os.getenv("HERMES_BINARY", "/opt/hermes/.venv/bin/hermes")
         # Default is the macOS Homebrew path; Linux installs typically have docker in PATH
         self.docker_bin: str = os.getenv("HERMES_DOCKER_BIN", "/opt/homebrew/bin/docker")
 
     def invoke(self, tool: str, prompt: str, **kwargs) -> InvokeResult:
-        model: Optional[str] = kwargs.get("model")
-        provider: Optional[str] = kwargs.get("provider")
+        model: str | None = kwargs.get("model")
+        provider: str | None = kwargs.get("provider")
         quiet: bool = kwargs.get("quiet", True)
         timeout: int = kwargs.get("timeout", 150)
 
@@ -177,7 +176,7 @@ class DockerSSHBackend(HermesBackend):
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def _resolve_api_key(self, provider: Optional[str] = None) -> str:
+    def _resolve_api_key(self, provider: str | None = None) -> str:
         """Resolve API key, falling back to provider-specific env vars."""
         key = os.getenv("HERMES_API_KEY", "")
         if not key:

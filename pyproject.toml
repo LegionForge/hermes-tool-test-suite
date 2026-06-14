@@ -38,6 +38,8 @@ dev = [
     "black>=23.0.0",
     "ruff>=0.1.0",
     "mypy>=1.0.0",
+    "bandit[toml]>=1.7.0",
+    "pytest-cov>=4.0.0",
 ]
 
 [tool.setuptools]
@@ -64,6 +66,11 @@ markers = [
     "slow: Tests that take >10 seconds",
     "requires_computer_use: Requires --computer-use flag",
 ]
+
+[tool.bandit]
+targets = ["harness", "metrics"]
+# B404/B603/B607: subprocess usage is intentional in this test harness
+skips = ["B404", "B603", "B607"]
 
 [tool.black]
 line-length = 120

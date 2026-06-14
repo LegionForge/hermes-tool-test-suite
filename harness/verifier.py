@@ -4,8 +4,6 @@ Critical: Tests must verify that tools actually execute, not just
 that models generate text that looks like tool calls.
 """
 
-import os
-from typing import Optional
 from harness.runner import HermesRunner
 
 
@@ -50,10 +48,10 @@ class SideEffectVerifier:
         except ValueError:
             return 0
 
-    def screenshot_exists(self, screenshot_path: Optional[str] = None) -> bool:
+    def screenshot_exists(self, screenshot_path: str | None = None) -> bool:
         """Verify that a screenshot was captured (for computer_use tests)."""
         if screenshot_path is None:
-            screenshot_path = "/tmp/hermes-screenshot-*.png"
+            screenshot_path = "/tmp/hermes-screenshot-*.png"  # nosec B108
         cmd = f"ls {screenshot_path} 2>/dev/null | wc -l"
         output = self.runner.get_verification_output(cmd)
         try:

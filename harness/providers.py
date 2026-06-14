@@ -1,6 +1,7 @@
 """Model provider configurations and matrix."""
 
 import os
+
 from harness.models import ModelConfig
 
 _ollama_host = os.getenv("HERMES_OLLAMA_HOST", "localhost")
