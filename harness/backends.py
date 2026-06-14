@@ -14,7 +14,6 @@ import os
 import subprocess
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -101,8 +100,8 @@ class DockerSSHBackend(HermesBackend):
         self.docker_bin: str = os.getenv("HERMES_DOCKER_BIN", "/opt/homebrew/bin/docker")
 
     def invoke(self, tool: str, prompt: str, **kwargs) -> InvokeResult:
-        model: Optional[str] = kwargs.get("model")
-        provider: Optional[str] = kwargs.get("provider")
+        model: str | None = kwargs.get("model")
+        provider: str | None = kwargs.get("provider")
         quiet: bool = kwargs.get("quiet", True)
         timeout: int = kwargs.get("timeout", 150)
 
@@ -177,7 +176,7 @@ class DockerSSHBackend(HermesBackend):
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
 
-    def _resolve_api_key(self, provider: Optional[str] = None) -> str:
+    def _resolve_api_key(self, provider: str | None = None) -> str:
         """Resolve API key, falling back to provider-specific env vars."""
         key = os.getenv("HERMES_API_KEY", "")
         if not key:
