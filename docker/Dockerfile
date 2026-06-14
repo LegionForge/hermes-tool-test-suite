@@ -33,6 +33,10 @@ USER hermes
 # subcommand name. Common patterns: `hermes discord`, `hermes serve`, `hermes bot`.
 # The test harness reaches Hermes via `docker exec hermes-sandbox hermes chat ...`
 # against this running container, so the main process just needs to stay alive.
+# Health check: verify the hermes binary is callable
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD ["/opt/hermes/.venv/bin/hermes", "--version"]
+
 CMD ["/opt/hermes/.venv/bin/hermes", "discord"]
 
 # =============================================================================
