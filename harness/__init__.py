@@ -3,10 +3,10 @@
 Core components for running, verifying, and scoring Hermes tool invocations.
 """
 
-from harness.models import ToolResult, TestMetadata
+from harness.backends import DockerSSHBackend, HermesBackend, InvokeResult
+from harness.models import TestMetadata, ToolResult
 from harness.runner import HermesRunner
 from harness.verifier import SideEffectVerifier
-from harness.backends import HermesBackend, InvokeResult, DockerSSHBackend
 
 __all__ = [
     "ToolResult",
