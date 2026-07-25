@@ -2,6 +2,8 @@
 
 ![Tests](https://img.shields.io/badge/Phase%201-8%2F10%20PASS-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![Python](https://img.shields.io/badge/python-3.11+-blue)
 
+💛 [Support this project](https://legionforge.org/donations) — LegionForge is open-source and independently maintained.
+
 A pytest-based tool-calling validation harness for [Hermes](https://github.com/NousResearch/hermes-agent) (by Nous Research), testing whether LLM agents correctly invoke tools rather than hallucinating answers. Tests run against a live Hermes instance in Docker via SSH.
 
 ## How It Works
