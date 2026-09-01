@@ -8,12 +8,12 @@ on:
 
 jobs:
   lint:
-    uses: LegionForge/dev-rig/.github/workflows/lint.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/lint.yml@dbc782028577aef46e21c674a807efce9b5b9007
     with:
       source-dirs: "harness metrics"
 
   test:
-    uses: LegionForge/dev-rig/.github/workflows/test.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/test.yml@dbc782028577aef46e21c674a807efce9b5b9007
     with:
       coverage-source: "harness"
       # Nearly every test in this suite requires a live Hermes SSH host and
@@ -23,7 +23,7 @@ jobs:
       coverage-threshold: 40
 
   sast:
-    uses: LegionForge/dev-rig/.github/workflows/sast.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/sast.yml@dbc782028577aef46e21c674a807efce9b5b9007
     with:
       source-dirs: "harness metrics"
       semgrep-configs: "p/python p/secrets"
@@ -33,18 +33,18 @@ jobs:
       actions: read
 
   audit:
-    uses: LegionForge/dev-rig/.github/workflows/audit.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/audit.yml@dbc782028577aef46e21c674a807efce9b5b9007
 
   secrets:
-    uses: LegionForge/dev-rig/.github/workflows/secrets.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/secrets.yml@dbc782028577aef46e21c674a807efce9b5b9007
     permissions:
       contents: read
 
   sbom:
-    uses: LegionForge/dev-rig/.github/workflows/sbom.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/sbom.yml@dbc782028577aef46e21c674a807efce9b5b9007
 
   trivy:
-    uses: LegionForge/dev-rig/.github/workflows/trivy.yml@3209b9c8ceb717f71a08a72fd4afc9debcacbd0d
+    uses: LegionForge/dev-rig/.github/workflows/trivy.yml@dbc782028577aef46e21c674a807efce9b5b9007
     permissions:
       security-events: write
       contents: read
