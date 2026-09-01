@@ -4,7 +4,7 @@ Tests that multiple tools can be chained: search → extract → save to file.
 """
 
 import pytest
-from harness.runner import HelmesRunner
+from harness.runner import HermesRunner
 from harness.verifier import SideEffectVerifier
 
 

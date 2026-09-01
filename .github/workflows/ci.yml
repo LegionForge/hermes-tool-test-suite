@@ -16,7 +16,11 @@ jobs:
     uses: LegionForge/dev-rig/.github/workflows/test.yml@main
     with:
       coverage-source: "harness"
-      coverage-threshold: 50
+      # Nearly every test in this suite requires a live Hermes SSH host and
+      # skips cleanly in CI without one (see conftest.py's hermes_ssh_host
+      # fixture). 40 is the realistic floor for what CI alone exercises;
+      # full coverage requires running against a live backend.
+      coverage-threshold: 40
 
   sast:
     uses: LegionForge/dev-rig/.github/workflows/sast.yml@main
@@ -24,7 +28,9 @@ jobs:
       source-dirs: "harness metrics"
       semgrep-configs: "p/python p/secrets"
     permissions:
+      contents: read
       security-events: write
+      actions: read
 
   audit:
     uses: LegionForge/dev-rig/.github/workflows/audit.yml@main
