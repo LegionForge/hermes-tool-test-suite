@@ -24,7 +24,9 @@ jobs:
       source-dirs: "harness metrics"
       semgrep-configs: "p/python p/secrets"
     permissions:
+      contents: read
       security-events: write
+      actions: read
 
   audit:
     uses: LegionForge/dev-rig/.github/workflows/audit.yml@main
