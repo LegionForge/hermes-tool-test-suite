@@ -2,6 +2,7 @@
 
 import os
 import re
+import shlex
 import subprocess
 import time
 
@@ -42,15 +43,19 @@ class HermesRunner:
         Returns:
             ToolResult with response, tool calls detected, timing info
         """
-        # Build hermes command
-        toolsets_str = ",".join(toolsets)
-        model_arg = f"-m {model}" if model else ""
-        provider_arg = f"--provider {provider}" if provider else ""
+        # Build hermes command. Every piece of caller-controlled data (prompt,
+        # toolsets, model, provider) is shlex.quote()'d before landing in the
+        # command string -- this string is sent to the remote host's shell via
+        # ssh, so naive interpolation is a real command-injection path, not
+        # just a lint false positive.
+        toolsets_str = ",".join(shlex.quote(t) for t in toolsets)
+        model_arg = f"-m {shlex.quote(model)}" if model else ""
+        provider_arg = f"--provider {shlex.quote(provider)}" if provider else ""
         quiet_flag = "-Q" if quiet else ""
 
         hermes_cmd = (
             f'/opt/hermes/.venv/bin/hermes chat '
-            f'-q "{self._escape_prompt(prompt)}" '
+            f'-q {shlex.quote(prompt)} '
             f'-t {toolsets_str} '
             f'{model_arg} {provider_arg} {quiet_flag}'
         ).strip()
@@ -65,12 +70,12 @@ class HermesRunner:
                 api_key = os.getenv("OPENROUTER_API_KEY", "")
             elif provider == "inceptionlabs":
                 api_key = os.getenv("INCEPTIONLABS_API_KEY", "")
-        env_prefix = f"HERMES_API_KEY={api_key} " if api_key else ""
+        env_prefix = f"HERMES_API_KEY={shlex.quote(api_key)} " if api_key else ""
 
         ssh_cmd = [
             "ssh",
             self.ssh_host,
-            f"{env_prefix}/opt/homebrew/bin/docker exec {self.container_name} {hermes_cmd}",
+            f"{env_prefix}/opt/homebrew/bin/docker exec {shlex.quote(self.container_name)} {hermes_cmd}",
         ]
 
         # Execute with subprocess timeout (higher than test timeout to let pytest handle it)
@@ -113,12 +118,6 @@ class HermesRunner:
         ssh_cmd = ["ssh", self.ssh_host, command]
         result = subprocess.run(ssh_cmd, capture_output=True, text=True, timeout=10)
         return result.stdout.strip()
-
-    @staticmethod
-    def _escape_prompt(prompt: str) -> str:
-        """Escape prompt for shell safety."""
-        # Replace double quotes with escaped quotes
-        return prompt.replace('"', '\\"')
 
     @staticmethod
     def _detect_tool_calls(output: str) -> list[str]:

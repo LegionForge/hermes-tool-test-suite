@@ -126,6 +126,7 @@ def pytest_configure(config):
         "level3: Tool chaining and pipelines",
         "level4: Browser automation tests",
         "level5: Host machine control (computer_use)",
+        "level6: Cross-model comparison tests",
         "slow: Tests that take >10 seconds",
     ]
     for marker in markers:

@@ -8,7 +8,6 @@ Run with: pytest tests/level6_model_matrix/ --model-matrix
 
 import pytest
 from harness.providers import MODEL_MATRIX, DEFAULT_MODEL
-from harness.runner import HermesRunner
 
 
 @pytest.fixture(params=MODEL_MATRIX if hasattr(pytest, "model_matrix") else [DEFAULT_MODEL])
@@ -18,7 +17,7 @@ def model_config(request):
 
 
 @pytest.mark.level6
-def test_simple_echo_all_models(model_config):
+def test_simple_echo_all_models(model_config, hermes_runner):
     """Test 1.1: Echo on all models.
 
     Currently configured model: DEFAULT_MODEL
@@ -27,22 +26,20 @@ def test_simple_echo_all_models(model_config):
     2. Add to MODEL_MATRIX list
     3. Run: pytest tests/level6_model_matrix/ --model-matrix
     """
-    runner = HermesRunner()
     prompt = 'Echo the text: "MODEL_TEST_SUCCESS"'
 
-    result = runner.run(prompt, toolsets=["terminal"])
+    result = hermes_runner.run(prompt, toolsets=["terminal"])
 
     assert result.success
     assert "MODEL_TEST_SUCCESS" in result.response_text
 
 
 @pytest.mark.level6
-def test_tool_selection_all_models(model_config):
+def test_tool_selection_all_models(model_config, hermes_runner):
     """Test 2.1: Tool selection across models."""
-    runner = HermesRunner()
     prompt = 'Write "test" to /tmp/model-test.txt'
 
-    result = runner.run(prompt, toolsets=["file", "terminal"])
+    result = hermes_runner.run(prompt, toolsets=["file", "terminal"])
 
     assert result.success
     assert len(result.tool_calls_detected) > 0
